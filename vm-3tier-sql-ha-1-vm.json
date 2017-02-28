@@ -222,6 +222,7 @@
                 }
             }
         },
+
         {
             "name": "[concat('fswVm', copyIndex())]",
             "copy": {
@@ -261,52 +262,6 @@
             }
         },
         {
-            "name": "[concat('dscScriptInstallAD', copyindex())]",
-            "copy": {
-                "name": "dscScriptLoop",
-                "count": "[parameters('vm-settings').dc.count]"
-            },
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2016-09-01",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', concat('dcVm', copyindex()))]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('dscTemplate')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "extn-settings": {
-                        "value": {
-                            "name": "dsc-install-ad",
-                            "publisher": "Microsoft.Powershell",
-                            "type": "DSC",
-                            "typeHandlerVersion": "2.9",
-                            "vmName": "[concat(parameters('vm-settings').dc.name, copyIndex())]",
-                            "url": "[variables('dscScriptsUrl')]",
-                            "folder": "[parameters('vm-settings').dc.dscFolder]",
-                            "file": "[parameters('vm-settings').dc.dsc[copyIndex()]]",
-                            "function": "[parameters('vm-settings').dc.dscFunction[copyIndex()]]",
-                            "configurationArguments": {
-                                "domainName": "[parameters('vm-settings').dc.domainName]",
-                                "adminCreds": {
-                                    "userName": "[parameters('vm-settings').dc.adminUserName]",
-                                    "password": "PrivateSettingsRef:adminPassword"
-                                }
-                            },
-                            "protectedSettings": {
-                                "items": {
-                                    "adminPassword": "[parameters('vm-settings').dc.adminPassword]"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        {
             "name": "[concat('dscScriptInstallIIS', copyindex())]",
             "copy": {
                 "name": "dscScriptLoop",
@@ -337,6 +292,91 @@
                             "function": "[parameters('vm-settings').web.dscFunction]",
                             "configurationArguments": null,
                             "protectedSettings": null
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "name": "dscScriptInstallPDC",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2016-09-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'dcVm0')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('dscTemplate')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "extn-settings": {
+                        "value": {
+                            "name": "dsc-install-pdc",
+                            "publisher": "Microsoft.Powershell",
+                            "type": "DSC",
+                            "typeHandlerVersion": "2.9",
+                            "vmName": "[concat(parameters('vm-settings').dc.name, '0')]",
+                            "url": "[variables('dscScriptsUrl')]",
+                            "folder": "[parameters('vm-settings').dc.dscFolder]",
+                            "file": "[parameters('vm-settings').dc.dsc[0]]",
+                            "function": "[parameters('vm-settings').dc.dscFunction[0]]",
+                            "configurationArguments": {
+                                "domainName": "[parameters('vm-settings').dc.domainName]",
+                                "adminCreds": {
+                                    "userName": "[parameters('vm-settings').dc.adminUserName]",
+                                    "password": "PrivateSettingsRef:adminPassword"
+                                }
+                            },
+                            "protectedSettings": {
+                                "items": {
+                                    "adminPassword": "[parameters('vm-settings').dc.adminPassword]"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "name": "dscScriptInstallBDC",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2016-09-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'dcVm1')]",
+                "[resourceId('Microsoft.Resources/deployments', 'dscScriptInstallPDC')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('dscTemplate')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "extn-settings": {
+                        "value": {
+                            "name": "dsc-install-bdc",
+                            "publisher": "Microsoft.Powershell",
+                            "type": "DSC",
+                            "typeHandlerVersion": "2.9",
+                            "vmName": "[concat(parameters('vm-settings').dc.name, '1')]",
+                            "url": "[variables('dscScriptsUrl')]",
+                            "folder": "[parameters('vm-settings').dc.dscFolder]",
+                            "file": "[parameters('vm-settings').dc.dsc[1]]",
+                            "function": "[parameters('vm-settings').dc.dscFunction[1]]",
+                            "configurationArguments": {
+                                "domainName": "[parameters('vm-settings').dc.domainName]",
+                                "adminCreds": {
+                                    "userName": "[parameters('vm-settings').dc.adminUserName]",
+                                    "password": "PrivateSettingsRef:adminPassword"
+                                }
+                            },
+                            "protectedSettings": {
+                                "items": {
+                                    "adminPassword": "[parameters('vm-settings').dc.adminPassword]"
+                                }
+                            }
                         }
                     }
                 }
