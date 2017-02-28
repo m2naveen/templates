@@ -289,7 +289,7 @@
                             "folder": "[parameters('vm-settings').dc.dscFolder]",
                             "file": "[parameters('vm-settings').dc.dsc[copyIndex()]]",
                             "function": "[parameters('vm-settings').dc.dsc[copyIndex()]]",
-                            "properties": {
+                            "configurationArguments": {
                                 "domainName": "[parameters('vm-settings').dc.domainName]",
                                 "adminCreds": {
                                     "userName": "[parameters('vm-settings').dc.adminUserName]",
@@ -335,7 +335,7 @@
                             "folder": "[parameters('vm-settings').web.dscFolder]",
                             "file": "[parameters('vm-settings').web.dsc]",
                             "function": "[parameters('vm-settings').web.dsc]",
-                            "properties": null,
+                            "configurationArguments": null,
                             "protectedSettings": null
                         }
                     }
