@@ -945,7 +945,7 @@
                                 "imageSku": "[variables('vmOS')[parameters('vm-settings').type][2]]",
                                 "dsc": "[parameters('dc-settings').dsc]",
                                 "dscFolder": "[parameters('dc-settings').dscFolder]",
-                                "dscFuction": "[parameters('dc-settings').dscFunction]",
+                                "dscFunction": "[parameters('dc-settings').dscFunction]",
                                 "nicName": "dc-nic-",
                                 "vmSize": "Standard_D2_v2",
                                 "storageAccountContainerName": "[toLower(concat(resourceGroup().name, '-dc-', uniqueString(resourceGroup().id, deployment().name)))]"
