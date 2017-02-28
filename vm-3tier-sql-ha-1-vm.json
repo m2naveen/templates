@@ -288,7 +288,7 @@
                             "url": "[variables('dscScriptsUrl')]",
                             "folder": "[parameters('vm-settings').dc.dscFolder]",
                             "file": "[parameters('vm-settings').dc.dsc[copyIndex()]]",
-                            "function": "[parameters('vm-settings').dc.dsc[copyIndex()]]",
+                            "function": "[parameters('vm-settings').dc.dscFunction[copyIndex()]]",
                             "configurationArguments": {
                                 "domainName": "[parameters('vm-settings').dc.domainName]",
                                 "adminCreds": {
@@ -334,7 +334,7 @@
                             "url": "[variables('dscScriptsUrl')]",
                             "folder": "[parameters('vm-settings').web.dscFolder]",
                             "file": "[parameters('vm-settings').web.dsc]",
-                            "function": "[parameters('vm-settings').web.dsc]",
+                            "function": "[parameters('vm-settings').web.dscFunction]",
                             "configurationArguments": null,
                             "protectedSettings": null
                         }
